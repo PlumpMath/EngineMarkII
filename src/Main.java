@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 
+//test
 public class Main extends JFrame implements Runnable, KeyListener
 {
 	private static final long serialVersionUID = 1L;
