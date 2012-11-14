@@ -15,7 +15,7 @@ public class Particle {
 		previousState = state;
 		mass = m;
 		forces = new HashMap<String, Vector2>();
-		forces.put("gravity", new Vector2(0.0f, 9.81f));
+		//forces.put("gravity", new Vector2(0.0f, 9.81f));
 	}
 	
 	public void tick(float t, float dt)
@@ -43,6 +43,10 @@ public class Particle {
 		if(forces.containsKey(name))
 			forces.remove(name);
 	}
+	public float getMass()
+	{
+		return mass;
+	}
 	
 	private Derivative evaluate(final State initial, float t, float dt, final Derivative derivative)
 	{
@@ -61,7 +65,7 @@ public class Particle {
 		Iterator<Vector2> iterator = forces.values().iterator();
 		while(iterator.hasNext())
 		{
-			result = result.add(iterator.next());
+			result = result.add(iterator.next().dotProduct(1/mass));
 		}
 		iterator = forces.values().iterator();
 		return result;

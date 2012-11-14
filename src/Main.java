@@ -2,20 +2,19 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
 
-//test
 public class Main extends JFrame implements Runnable, KeyListener
 {
 	private static final long serialVersionUID = 1L;
+	private static final float gravitationalConstant = 1.0f/5972.0f;
 	private BufferedImage buffer;
 	private Graphics bufferGraphics;
 	private double t, dt, alpha;
 	private double currentTime, accumulator;
-	private ArrayList<Particle> particles;
+	private Particle planet, satellite;
 	
 	public Main(String title)
 	{
@@ -26,12 +25,8 @@ public class Main extends JFrame implements Runnable, KeyListener
 		dt = 1.0/60.0;
 		accumulator = 0.0;
 		
-		particles = new ArrayList<Particle>();
-		for(int i = 0; i < 10; i++)
-		{
-			particles.add(new Particle(new Vector2(250, 250), new Vector2(0.0f, 0.0f), 1.0f));
-			particles.get(i).addForce("random", new Vector2((float)(Math.random()-0.5)*500.0f, (float)(-Math.random())*250.0f));
-		}
+		planet = new Particle(new Vector2(250.0f, 250.0f), new Vector2(0.0f, 0.0f), (float)5983000000.0f);
+		satellite = new Particle(new Vector2(250.0f, 150.0f), new Vector2(100.0f, 0.0f), 1.0f);
 		
 		addKeyListener(this);
 	}
@@ -53,10 +48,13 @@ public class Main extends JFrame implements Runnable, KeyListener
 			accumulator += frameTime;
 			while(accumulator >= dt)
 			{
-				for(int i = 0; i < particles.size(); i++)
-				{
-					particles.get(i).tick((float)t, (float)dt);
-				}
+				double r = Math.sqrt(Math.pow(satellite.state.r.x-250, 2) + Math.pow(satellite.state.r.y-250, 2));
+				double forceMagnitude = gravitationalConstant*satellite.getMass()*planet.getMass()/(r*r);
+				Vector2 forceDirection = new Vector2((float)(250-satellite.state.r.x), (float)(250-satellite.state.r.y)).getUnitVector();
+				Vector2 force = forceDirection.dotProduct((float)forceMagnitude);
+				satellite.removeForce("cent");
+				satellite.addForce("cent", force);
+				satellite.tick((float)t, (float)dt);
 				t += dt;
 				accumulator -= dt;
 			}
@@ -69,10 +67,8 @@ public class Main extends JFrame implements Runnable, KeyListener
 	public void paint(Graphics g)
 	{
 		bufferGraphics.clearRect(0, 0, getWidth(), getHeight());
-		for(int i = 0; i < particles.size(); i++)
-		{
-			particles.get(i).draw(bufferGraphics, alpha);
-		}
+		planet.draw(bufferGraphics, alpha);
+		satellite.draw(bufferGraphics, alpha);
 		g.drawImage(buffer, 0, 0, null);
 	}
 	public void update(Graphics g)
@@ -93,48 +89,20 @@ public class Main extends JFrame implements Runnable, KeyListener
 	}
 	public void keyPressed(KeyEvent e) 
 	{
-		/*
 		int keyCode = e.getKeyCode();
-		if(keyCode == KeyEvent.VK_UP)
+		if(keyCode == KeyEvent.VK_SPACE)
 		{
-			particle.addForce("up", new Vector2(0, -15));
+			satellite.addForce("thrust", satellite.state.v.getUnitVector().dotProduct(100.0f));
 		}
-		if(keyCode == KeyEvent.VK_DOWN)
-		{
-			particle.addForce("down", new Vector2(0, 15));
-		}
-		if(keyCode == KeyEvent.VK_LEFT)
-		{
-			particle.addForce("left", new Vector2(-15, 0));
-		}
-		if(keyCode == KeyEvent.VK_RIGHT)
-		{
-			particle.addForce("right", new Vector2(15, 0));
-		}
-		*/
 	}
 	@Override
 	public void keyReleased(KeyEvent e)
 	{
-		/*
 		int keyCode = e.getKeyCode();
-		if(keyCode == KeyEvent.VK_UP)
+		if(keyCode == KeyEvent.VK_SPACE)
 		{
-			particle.removeForce("up");
+			satellite.removeForce("thrust");
 		}
-		if(keyCode == KeyEvent.VK_DOWN)
-		{
-			particle.removeForce("down");
-		}
-		if(keyCode == KeyEvent.VK_LEFT)
-		{
-			particle.removeForce("left");
-		}
-		if(keyCode == KeyEvent.VK_RIGHT)
-		{
-			particle.removeForce("right");
-		}
-		*/
 	}
 	@Override
 	public void keyTyped(KeyEvent e) {}
