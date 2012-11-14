@@ -52,8 +52,8 @@ public class Main extends JFrame implements Runnable, KeyListener
 				double forceMagnitude = gravitationalConstant*satellite.getMass()*planet.getMass()/(r*r);
 				Vector2 forceDirection = new Vector2((float)(250-satellite.state.r.x), (float)(250-satellite.state.r.y)).getUnitVector();
 				Vector2 force = forceDirection.dotProduct((float)forceMagnitude);
-				satellite.removeForce("cent");
-				satellite.addForce("cent", force);
+				satellite.removeForce("gravity");
+				satellite.addForce("gravity", force);
 				satellite.tick((float)t, (float)dt);
 				t += dt;
 				accumulator -= dt;
