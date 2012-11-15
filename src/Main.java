@@ -26,7 +26,7 @@ public class Main extends JFrame implements Runnable, KeyListener
 		accumulator = 0.0;
 		
 		planet = new Particle(new Vector2(250.0f, 250.0f), new Vector2(0.0f, 0.0f), (float)5983000000.0f);
-		satellite = new Particle(new Vector2(0.0f, 150.0f), new Vector2(10.0f, 0.0f), 1.0f);
+		satellite = new Particle(new Vector2(250.0f, 150.0f), new Vector2(100.0f, 0.0f), 1.0f);
 		
 		addKeyListener(this);
 	}
