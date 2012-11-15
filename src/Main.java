@@ -25,8 +25,8 @@ public class Main extends JFrame implements Runnable, KeyListener
 		dt = 1.0/60.0;
 		accumulator = 0.0;
 		
-		planet = new Particle(new Vector2(250.0f, 250.0f), new Vector2(0.0f, 0.0f), (float)5983000000.0f);
-		satellite = new Particle(new Vector2(250.0f, 150.0f), new Vector2(100.0f, 0.0f), 1.0f);
+		planet = new Particle(new Vector2(250.0f, 250.0f), new Vector2(0.0f, 0.0f), (float)6983000000.0f);
+		satellite = new Particle(new Vector2(0.0f, 0.0f), new Vector2(100.0f, 0.0f), 1.0f);
 		
 		addKeyListener(this);
 	}
@@ -94,6 +94,27 @@ public class Main extends JFrame implements Runnable, KeyListener
 		{
 			satellite.addForce("thrust", satellite.state.v.getUnitVector().dotProduct(100.0f));
 		}
+		if(keyCode == KeyEvent.VK_UP)
+		{
+			satellite.addForce("up", new Vector2(0, -100));
+		}
+		if(keyCode == KeyEvent.VK_DOWN)
+		{
+			satellite.addForce("down", new Vector2(0, 100));
+		}
+		if(keyCode == KeyEvent.VK_LEFT)
+		{
+			satellite.addForce("left", new Vector2(-100, 0));
+		}
+		if(keyCode == KeyEvent.VK_RIGHT)
+		{
+			satellite.addForce("right", new Vector2(100, 0));
+		}
+		if(keyCode == KeyEvent.VK_R)
+		{
+			satellite.state.r = new Vector2();
+			satellite.state.v = new Vector2();
+		}
 	}
 	@Override
 	public void keyReleased(KeyEvent e)
@@ -102,6 +123,22 @@ public class Main extends JFrame implements Runnable, KeyListener
 		if(keyCode == KeyEvent.VK_SPACE)
 		{
 			satellite.removeForce("thrust");
+		}
+		if(keyCode == KeyEvent.VK_UP)
+		{
+			satellite.removeForce("up");
+		}
+		if(keyCode == KeyEvent.VK_DOWN)
+		{
+			satellite.removeForce("down");
+		}
+		if(keyCode == KeyEvent.VK_LEFT)
+		{
+			satellite.removeForce("left");
+		}
+		if(keyCode == KeyEvent.VK_RIGHT)
+		{
+			satellite.removeForce("right");
 		}
 	}
 	@Override
