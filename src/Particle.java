@@ -31,7 +31,7 @@ public class Particle {
 	
 	public void draw(Graphics g, double alpha)
 	{
-		g.drawRect((int)Math.round(state.r.x*alpha + previousState.r.x*(1.0-alpha)), (int)Math.round(state.r.y*alpha + previousState.r.y*(1.0-alpha)), 5, 5);
+		g.fillOval((int)Math.round(state.r.x*alpha + previousState.r.x*(1.0-alpha)) + 4, (int)Math.round(state.r.y*alpha + previousState.r.y*(1.0-alpha)) + 4, 8, 8);
 	}
 	
 	public void addForce(String name, Vector2 force)
